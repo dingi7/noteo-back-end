@@ -52,8 +52,8 @@ noteController
                 400
             );
         }
-        const { title, body } = await c.req.json<notePayload>();
-        const result = await updateNote(noteId, user._id, title, body);
+        const { name, title, body } = await c.req.json<notePayload>();
+        const result = await updateNote(noteId, user._id, title, body, name);
         return c.json(result, 200);
     });
 

@@ -56,11 +56,13 @@ async function updateNote(
     noteId: string,
     userId: string,
     newTitle: string | undefined,
-    newBody: string | undefined
+    newBody: string | undefined,
+    name: string | undefined
 ) {
     const note = await getNoteIfAuthorized(noteId, userId);
     note.title = newTitle || note.title;
     note.body = newBody || note.body;
+    note.name = name || note.name;
     await note.save();
     return note;
 }
