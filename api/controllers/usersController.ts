@@ -1,4 +1,9 @@
-import { registerUser, loginUser } from '../services/auth';
+import {
+    registerUser,
+    loginUser,
+    checkAuthorization,
+    toggleAutoSave,
+} from '../services/auth';
 import { Context, Hono } from 'hono';
 import { RegisterPayload } from '../../interfaces/RegisterPayload';
 
@@ -25,6 +30,16 @@ router.post('/login', async (c: Context) => {
     }
     const result = await loginUser(reqBody);
     return c.json(result, 200); // probably should be 404 if user not found
+});
+
+router.post('/autoSave', async (c: Context) => {
+    const { autoSave } = await c.req.json();
+    const user = checkAuthorization(c);
+    if (!user?._id) {
+        return c.json({ error: 'Unauthorized' }, 401);
+    }
+    const result = await toggleAutoSave(user._id, autoSave);
+    return c.json(result, 200);
 });
 
 export default router;

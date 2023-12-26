@@ -64,6 +64,7 @@ function createSession(user: IUser): ISession {
         _id: user._id,
         username: user.username,
         email: user.email,
+        autoSave: user.autoSave,
         accessToken: jsonwebtoken.sign({ _id: user._id }, JWT_SECRET),
     };
 }
@@ -81,10 +82,21 @@ function checkAuthorization(c: AuthContext): ISession {
     }
 }
 
+async function toggleAutoSave(userId: string, autoSave: boolean) {
+    const user = await getUserById(userId);
+    if (!user) {
+        throw new Error('User not found');
+    }
+    user.autoSave = autoSave;
+    await user.save();
+    return user;
+}
+
 export {
     registerUser,
     loginUser,
     getUserById,
     verifySession,
     checkAuthorization,
+    toggleAutoSave,
 };
