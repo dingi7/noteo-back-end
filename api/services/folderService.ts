@@ -1,5 +1,6 @@
 import { getUserById } from './auth';
 import Folder from '../../models/folderModel';
+import Note from '../../models/noteModel';
 
 async function createFolder(name: string, owner: string) {
     const folder = new Folder({
@@ -30,6 +31,9 @@ async function editFolder(
 
 async function deleteFolder(boardId: string, ownerId: string) {
     const folder = await getFolderIfAuthorized(boardId, ownerId);
+    for (const note of folder.notes) {
+        await Note.findByIdAndDelete(note._id);
+    }
     await folder.deleteOne();
     return { message: 'Folder deleted successfully' };
 }
