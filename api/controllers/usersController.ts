@@ -42,4 +42,8 @@ router.post('/autoSave', async (c: Context) => {
     return c.json(result, 200);
 });
 
+router.post('/logout', async (c: Context) => {
+    return c.json({ message: 'Not implemented' }, 501);
+});
+
 export default router;
